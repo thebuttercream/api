@@ -45,3 +45,9 @@ quote-style = 'single'
 preview = true
 select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 
+[tool.taskipy.tasks]
+format = 'ruff check . --fix && ruff format .'
+lint = 'ruff check . && ruff check . --diff'
+post_test = 'coverage html'
+pre_test = 'task lint'
+test = 'pytest --cov=app -vv'
