@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: buttercream
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: buttercream@2024
+      POSTGRES_PASSWORD: localhost@1988
     ports:
       - "5432:5432"
     volumes:

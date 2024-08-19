@@ -41,14 +41,14 @@ def read_employee(employee_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[schemas.Employee])
-def read_customers(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    logger.info(f"Fetching Customers With Skip: {skip}, Limit: {limit}!")
-    customers = repository.get_customers(db, skip=skip, limit=limit)
-    return customers
+def read_employees(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    logger.info(f"Fetching employees With Skip: {skip}, Limit: {limit}!")
+    employees = repository.get_employees(db, skip=skip, limit=limit)
+    return employees
 
 
 @router.post("/identify", response_model=schemas.Employee)
-def identify_customer(cpf: schemas.CPFIdentify, db: Session = Depends(get_db)):
+def identify_employee(cpf: schemas.CPFIdentify, db: Session = Depends(get_db)):
     logger.info(f"Identifying Employee With CPF: {cpf.cpf}!")
     db_employee = repository.get_employee_by_cpf(db, cpf=cpf.cpf)
     if db_employee is None:
@@ -58,14 +58,14 @@ def identify_customer(cpf: schemas.CPFIdentify, db: Session = Depends(get_db)):
 
 
 @router.post("/register", response_model=schemas.Employee)
-def register_employee(customer: schemas.EmployeeCreate, db: Session = Depends(get_db)):
+def register_employee(employee: schemas.EmployeeCreate, db: Session = Depends(get_db)):
     logger.info(f"Registering Employee With Email: {Employees.email}")
     db_employee = repository.get_user_by_email(db, email=Employees.email)
     if db_employee:
         logger.warning(f"Employee With Email {Employees.email} Already Exists!")
         raise HTTPException(status_code=400, detail="Email Already Registered!")
-    created_employee = repository.create_user(db=db, user=customer)
-    logger.info(f"Customer Registered With ID: {created_employee.id}!")
+    created_employee = repository.create_user(db=db, user=employee)
+    logger.info(f"employee Registered With ID: {created_employee.id}!")
     return created_employee
 
 

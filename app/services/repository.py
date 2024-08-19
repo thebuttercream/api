@@ -1,16 +1,12 @@
 import logging
-import os
-from datetime import datetime, timedelta, timezone
-from typing import Dict, List
-
-from dotenv import load_dotenv
-from jose import jwt
-from sqlalchemy import text
 from sqlalchemy.orm import Session
-
 from ..model import models, schemas
-from ..tools.logging import logger
 from . import security
+from jose import jwt
+from datetime import datetime, timedelta, timezone
+from ..tools.logging import logger
+import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -113,7 +109,7 @@ def create_admin_user(db: Session):
         if not user:
             hashed_password = security.get_password_hash(admin_password)
             admin_user = models.Employees(
-                name=admin_name,
+                firstname=admin_name,
                 email=admin_email,
                 cpf=admin_cpf,
                 hashed_password=hashed_password
@@ -128,7 +124,7 @@ def create_admin_user(db: Session):
         logger.error(f"Error creating admin user: {e}")
 
 
-def get_employee_count(db: Session):
+def get_employees_count(db: Session):
     logger.info("Fetching total count of employees")
     return db.query(models.Employees).count()
 
@@ -153,5 +149,5 @@ def create_employee(db: Session, employee: schemas.EmployeeCreate):
     db.add(db_employee)
     db.commit()
     db.refresh(db_employee)
-    logger.info(f"Employee created with ID: {db_employee.id}")
+    logger.info(f"employee created with ID: {db_employee.id}")
     return db_employee

@@ -46,19 +46,13 @@ app.add_middleware(
 
 # Incluindo os roteadores
 app.include_router(auth.router)
-app.include_router(employee.router, prefix="/customers", tags=["customers"])
+app.include_router(employee.router, prefix="/employees", tags=["employees"])
 
 
 @app.get("/")
 def read_root():
     logger.debug("Status endpoint accessed")
     return {"status": "Operational"}
-
-
-@app.get("/users/me", response_model=schemas.Employee)
-def read_users_me(current_user: schemas.Employee = Depends(get_current_user)):
-    logger.debug(f"User endpoint accessed by {current_user.id}")
-    return current_user
 
 
 # Adiciona a rota para a documentação do ReDoc
