@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: buttercream
-      POSTGRES_USER: postgres
+      POSTGRES_USER: db
       POSTGRES_PASSWORD: localhost@1988
     ports:
       - "5432:5432"
@@ -17,9 +17,34 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:localhost%401988@db:5432/buttercream
+      DATABASE_URL: postgresql://db:localhost%401988@db:5432/buttercream
     volumes:
       - logs:/app/logs
+
+  mongodb:
+    image: mongo:4.4.28
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: buttercream
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+  mongodb-express:
+    image: mongo-express
+    ports:
+      - "9091:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongodb:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
 
 volumes:
   db-data:
