@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from ..model import schemas
-from ..postgres import database
+from ..db import database
 from . import repository
 from ..tools.logging import logger
 

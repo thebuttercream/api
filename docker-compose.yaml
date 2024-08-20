@@ -3,12 +3,12 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: buttercream
-      POSTGRES_USER: postgres
+      POSTGRES_USER: db
       POSTGRES_PASSWORD: localhost@1988
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:localhost%401988@postgres:5432/buttercream
+      DATABASE_URL: postgresql://db:localhost%401988@db:5432/buttercream
     volumes:
       - logs:/app/logs
 
