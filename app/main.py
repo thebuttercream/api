@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_redoc_html
 
-from app.db.database import Base, SessionLocal, engine
+from app.postgres.database import Base, SessionLocal, engine
 from app.model import schemas
 from app.routers import auth, employee
 from app.services.repository import create_admin_user

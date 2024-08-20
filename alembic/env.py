@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from dotenv import load_dotenv
 
-from app.db.database import Base
+from app.postgres.database import Base
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 

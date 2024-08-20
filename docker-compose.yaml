@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:localhost%401988@db:5432/buttercream
+      DATABASE_URL: postgresql://postgres:localhost%401988@postgres:5432/buttercream
     volumes:
       - logs:/app/logs
 
