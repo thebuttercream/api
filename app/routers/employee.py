@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..db.database import get_db
-from ..model import schemas
-from ..model.models import Employees
+from ..models import schemas
+from ..models.models import Employees
 from ..services import repository
 from ..tools.logging import logger
 
