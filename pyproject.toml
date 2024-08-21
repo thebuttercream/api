@@ -11,7 +11,7 @@ fastapi = "^0.112.1"
 alembic = "^1.13.2"
 aioredis = "^2.0.1"
 uvicorn = "^0.30.6"
-pymongo = "^4.8.0"
+pymongo = { extras = ["srv"], version = "^4.8.0" }
 flask = "^3.0.3"
 email-validator = "^2.2.0"
 
