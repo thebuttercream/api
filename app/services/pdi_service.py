@@ -1,13 +1,13 @@
 from pymongo.collection import Collection
 from bson import ObjectId
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from ..models.schemas import PDIBase, PDIInDB
 
 
 def create_pdi(db: Collection, pdi: PDIBase) -> PDIInDB:
-    pdi_dict = pdi.dict()
-    pdi_dict['dateadd'] = datetime.utcnow()
+    pdi_dict = pdi.model_dump()
+    pdi_dict['date_add'] = datetime.now(timezone.utc)
     result = db["pdi"].insert_one(pdi_dict)
     return PDIInDB(**{**pdi_dict, "id": str(result.inserted_id)})
 
@@ -20,12 +20,12 @@ def get_pdi(db: Collection, pdi_id: str) -> Optional[PDIInDB]:
 
 
 def get_all_pdi(db: Collection) -> list[PDIInDB]:
-    pdies = list(db["pdi"].find())
-    return [PDIInDB(**{**pdi, "id": str(pdi["_id"])}) for pdi in pdies]
+    pdi = list(db["pdi"].find())
+    return [PDIInDB(**{**pdi, "id": str(pdi["_id"])}) for pdi in pdi]
 
 
 def update_pdi(db: Collection, pdi_id: str, pdi: PDIBase) -> Optional[PDIInDB]:
-    update_data = pdi.dict(exclude_unset=True)
+    update_data = pdi.model_dump(exclude_unset=True)
     result = db["pdi"].update_one({"_id": ObjectId(pdi_id)}, {"$set": update_data})
     if result.modified_count == 0:
         return None

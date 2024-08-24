@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pymongo.collection import Collection
 from typing import List
 from ...db.database import get_db
-from ...models.schemas import EmployeeCreate, EmployeeInDB, EmployeeUpdate
+from ...models.schemas import EmployeeBase, EmployeeResponse, EmployeeUpdate
 from ...services.employee_service import (
     create_employee,
     get_employee,
@@ -14,12 +14,12 @@ from ...services.employee_service import (
 router = APIRouter()
 
 
-@router.post("/employee", response_model=EmployeeInDB)
-def create_employee_route(employee: EmployeeCreate, db: Collection = Depends(get_db)):
+@router.post("/employee", response_model=EmployeeResponse)
+def create_employee_route(employee: EmployeeBase, db: Collection = Depends(get_db)):
     return create_employee(db, employee)
 
 
-@router.get("/employee/{employee_id}", response_model=EmployeeInDB)
+@router.get("/employee/{employee_id}", response_model=EmployeeResponse)
 def get_employee_route(employee_id: str, db: Collection = Depends(get_db)):
     employee = get_employee(db, employee_id)
     if not employee:
@@ -27,12 +27,12 @@ def get_employee_route(employee_id: str, db: Collection = Depends(get_db)):
     return employee
 
 
-@router.get("/employee", response_model=List[EmployeeInDB])
+@router.get("/employee", response_model=List[EmployeeResponse])
 def get_all_employees_route(db: Collection = Depends(get_db)):
     return get_all_employees(db)
 
 
-@router.put("/employee/{employee_id}", response_model=EmployeeInDB)
+@router.put("/employee/{employee_id}", response_model=EmployeeResponse)
 def update_employee_route(employee_id: str, employee: EmployeeUpdate, db: Collection = Depends(get_db)):
     updated_employee = update_employee(db, employee_id, employee)
     if not updated_employee:

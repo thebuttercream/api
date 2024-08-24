@@ -5,7 +5,7 @@ from pymongo.collection import Collection
 from typing import List
 from ...db.database import get_db
 from ...models.schemas import PDIBase, PDIInDB
-from ...services.repository import get_pdi, get_all_pdi, update_pdi, delete_pdi
+from ...services.pdi_service import get_pdi, get_all_pdi, update_pdi, delete_pdi
 
 router = APIRouter()
 
