@@ -1,3 +1,3 @@
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = "admin"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

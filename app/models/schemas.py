@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 
-# Modelos relacionados ao Usuário
+# User
 class UserBase(BaseModel):
     email: str
 
@@ -22,7 +22,7 @@ class TokenData(BaseModel):
     id: str
 
 
-# Modelos relacionados ao PDI
+# PDI
 class PDIBase(BaseModel):
     pdi: str
 
@@ -41,7 +41,7 @@ class PDIRequest(PDIBase):
     pdi: str
 
 
-# Modelos relacionados ao Employee
+# Employee
 class EmployeeBase(BaseModel):
     firstname: str
     lastname: str

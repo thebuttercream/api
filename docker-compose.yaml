@@ -3,21 +3,10 @@ services:
     build: .
     ports:
       - "2000:2000"
-    depends_on:
-      - mongodb-express
     environment:
       MONGODB_URL: ${MONGODB_URL}
     volumes:
       - logs:/app/logs
-
-  mongodb-express:
-    image: mongo-express
-    ports:
-      - "9091:8081"
-    environment:
-      ME_CONFIG_MONGODB_URL: ${MONGODB_URL}
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin
 
 volumes:
   logs:
