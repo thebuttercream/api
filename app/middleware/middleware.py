@@ -1,14 +1,17 @@
 import logging
 import time
+from typing import Optional
 
 from aioredis import Redis, from_url
 from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.requests import Request
-
-from ..tools.logging import logger
 
 logger = logging.getLogger("Application")
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
@@ -17,7 +20,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.redis_url = redis_url
         self.rate_limit = rate_limit
         self.rate_limit_period = rate_limit_period
-        self.redis: Redis = None
+        self.redis: Optional[Redis] = None
 
     async def dispatch(self, request: Request, call_next):
         if not self.redis:
@@ -30,47 +33,33 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         start_time = current_time - self.rate_limit_period
 
         try:
-            logger.info(f"Handling request from IP: {ip} at time: {current_time}")
+            logger.info(f"Handling Request From IP: {ip} At Time: {current_time}!!!")
 
-            # Remove outdated requests
             removed = await self.redis.zremrangebyscore(key, 0, start_time)
-            logger.info(f"Removed {removed} outdated requests for key: {key}")
+            logger.info(f"Removed {removed} Outdated Requests for Key: {key}!!!")
 
-            # Get current request count
             request_count = await self.redis.zcard(key)
-            logger.info(f"Current request count for key {key}: {request_count}")
+            logger.info(f"Current Request Count For Key {key}: {request_count}!!!")
 
             if request_count >= self.rate_limit:
-                logger.warning(f"Rate limit exceeded for key {key}")
+                logger.warning(f"Rate Limit Exceeded For Key {key}!!!")
                 raise HTTPException(
                     status_code=429,
-                    detail="Too many requests from this IP. Please try again later."
+                    detail="Too Many Requests From This IP. Please Try Again Later!!!"
                 )
 
-            # Add current request
-            added = await self.redis.zadd(key, {current_time: current_time})
-            logger.info(f"Added {added} requests at time {current_time} for key {key}")
+            logger.info(f"Added Request At Time {current_time} For Key {key}!!!")
 
             expiration_set = await self.redis.expire(key, self.rate_limit_period)
-            logger.info(f"Set expiration for key {key}: {expiration_set}")
+            logger.info(f"Set Expiration For Key {key}: {expiration_set}!!!")
 
             response = await call_next(request)
-            logger.info(f"Request handled successfully for IP: {ip}")
+            logger.info(f"Request Handled Successfully for IP: {ip}!")
             return response
 
         except Exception as e:
-            logger.error(f"Error in RateLimitMiddleware: {e}")
+            logger.error(f"Error In RateLimitMiddleware: {e}!!!", exc_info=True)
             raise HTTPException(
                 status_code=500,
-                detail="Internal server error"
+                detail="Internal Server Error"
             )
-
-
-class ExceptionLoggingMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        try:
-            response = await call_next(request)
-            return response
-        except Exception as e:
-            logger.error(f"Unhandled error: {e}", exc_info=True)
-            raise HTTPException(status_code=500, detail="Internal Server Error")

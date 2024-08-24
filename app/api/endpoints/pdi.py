@@ -1,21 +1,21 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Depends
 from pymongo.collection import Collection
 from typing import List
 from ...db.database import get_db
 from ...models.schemas import PDIBase, PDIInDB
-from ...services.pdi_service import create_pdi, get_pdi, get_all_pdi, update_pdi, delete_pdi
+from ...services.pdi_service import get_pdi, get_all_pdi, update_pdi, delete_pdi
 
 router = APIRouter()
 
 
-@router.post("/", response_model=PDIInDB)
+@router.post("/pdi", response_model=PDIInDB)
 def create_pdi(pdi: PDIBase, db: Collection = Depends(get_db)) -> PDIInDB:
     pdi_dict = pdi.model_dump()  # Atualizado para usar model_dump
-    pdi_dict['date_add'] = datetime.utcnow()
+    pdi_dict['date_add'] = datetime.now(timezone.utc)
     try:
-        result = db["pdicollection"].insert_one(pdi_dict)
+        result = db["pdi"].insert_one(pdi_dict)
         if result.inserted_id:
             return PDIInDB(**{**pdi_dict, "id": str(result.inserted_id)})
         else:
