@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-# Career
 class CareerBase(BaseModel):
     id: UUID
     name: str
