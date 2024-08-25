@@ -2,7 +2,6 @@ from uuid import UUID
 from pydantic import BaseModel
 from typing import Optional
 
-
 # Person
 class PersonBase(BaseModel):
     id: UUID
@@ -15,17 +14,15 @@ class PersonBase(BaseModel):
     livingWith: str
     lifeGoal: str
 
-
 class PersonRequest(BaseModel):
-    name: str
-    formation: str
-    maritalStatus: str
-    location: str
-    age: int
-    position: str
-    livingWith: str
-    lifeGoal: str
-
+    name: Optional[str] = ""
+    formation: Optional[str] = ""
+    maritalStatus: Optional[str] = ""
+    location: Optional[str] = ""
+    age: Optional[int] = 0
+    position: Optional[str] = ""
+    livingWith: Optional[str] = ""
+    lifeGoal: Optional[str] = ""
 
 class PersonResponse(BaseModel):
     id: str
@@ -37,7 +34,6 @@ class PersonResponse(BaseModel):
     position: str
     livingWith: str
     lifeGoal: str
-
 
 class PersonUpdate(BaseModel):
     name: Optional[str] = None
