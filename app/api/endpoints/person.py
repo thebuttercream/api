@@ -5,14 +5,14 @@ from pymongo.collection import Collection
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.db.database import get_db
-from app.models.schemas import PersonResponse, PersonBase, PersonUpdate
-from app.services.person_service import create_person, get_person, get_all_person, update_person, delete_person
+from app.models.schemas.person import PersonResponse, PersonUpdate, PersonRequest
+from app.services.person import create_person, get_person, get_all_person, update_person, delete_person
 
 router = APIRouter()
 
 
 @router.post("/person", response_model=PersonResponse)
-def create_person_route(person: PersonBase, db: Collection = Depends(get_db)):
+def create_person_route(person: PersonRequest, db: Collection = Depends(get_db)):
     return create_person(db, person)
 
 

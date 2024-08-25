@@ -1,11 +1,18 @@
+from uuid import uuid4
+
 from pymongo.collection import Collection
 from bson import ObjectId
 from typing import Optional, List
-from ..models.schemas import PersonUpdate, PersonBase, PersonResponse
+from ..models.schemas.person import PersonUpdate, PersonResponse, PersonRequest
 
 
-def create_person(db: Collection, person: PersonBase) -> PersonResponse:
+def create_person(db: Collection, person: PersonRequest) -> PersonResponse:
+    person_id = uuid4()
     person_dict = person.model_dump()
+    person_dict['id'] = str(person_id)
+
+    person_dict = {k: v for k, v in person_dict.items() if v is not None}
+
     result = db["person"].insert_one(person_dict)
     return PersonResponse(**{**person_dict, "id": str(result.inserted_id)})
 
