@@ -2,7 +2,7 @@ from uuid import UUID
 from pydantic import BaseModel
 from typing import Optional
 
-# Person
+
 class PersonBase(BaseModel):
     id: UUID
     name: str
