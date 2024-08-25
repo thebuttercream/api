@@ -1,7 +1,7 @@
 from pymongo.collection import Collection
 from bson import ObjectId
 from typing import Optional, List
-from ..models.schemas import PersonUpdate, PersonBase, PersonResponse
+from ..models.schemas.person import PersonUpdate, PersonBase, PersonResponse
 
 
 def create_person(db: Collection, person: PersonBase) -> PersonResponse:
